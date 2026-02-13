@@ -13,26 +13,26 @@ System Design
 
 The solution follows a standard RAG architecture:
 
-PDF Parsing
+1. PDF Parsing
 
-Text Chunking
+2. Text Chunking
 
-Embedding Generation
+3. Embedding Generation
 
-Vector Similarity Search
+4. Vector Similarity Search
 
-LLM-Based Structured Extraction
+5. LLM-Based Structured Extraction
 
 This separation keeps the pipeline modular and easy to reason about.
 
 Current Pipeline Logic
 1. PDF Text Extraction
 
-The system uses PyMuPDF (fitz) to extract raw text from each page.
+The system uses PyMuPDF to extract raw text from each page.
 
 Page-level text is concatenated into a single string.
 
-No OCR is applied (only machine-readable PDFs are supported).
+No OCR is applied.
 
 2. Text Chunking
 
@@ -41,8 +41,6 @@ The extracted text is split using RecursiveCharacterTextSplitter.
 Chunk size: 800 characters
 
 Overlap: 100 characters
-
-Overlap ensures that specifications split across page boundaries are not lost.
 
 Each chunk is converted into a LangChain Document object.
 
@@ -81,14 +79,6 @@ Output is enforced through a Pydantic schema:
   }
 ]
 
-The LLM is instructed to:
-
-Use only provided context
-
-Avoid hallucination
-
-Return an empty list if no specification is found
-
 Tools and Libraries Used
 Component	Tool
 PDF Parsing	PyMuPDF
@@ -98,6 +88,7 @@ Vector Store	FAISS
 LLM	GPT-4o-mini
 Structured Output	Pydantic
 UI	Gradio
+
 Why This Approach
 
 Semantic retrieval performs better than regex-based extraction for technical manuals.
@@ -152,19 +143,19 @@ How to Run
 
 Install dependencies:
 
-pip install pymupdf langchain langchain-community langchain-openai faiss-cpu gradio pydantic
+-pip install pymupdf langchain langchain-community langchain-openai faiss-cpu gradio pydantic
 
-Set your OpenAI API key as an environment variable.
+-Set your OpenAI API key as an environment variable.
 
-Run the notebook.
+-Run the notebook.
 
-Upload a service manual PDF.
+-Upload a service manual PDF.
 
-Enter a query such as:
+-Enter a query such as:
 
 Torque for brake caliper bolts
 
-View structured JSON output.
+-View structured JSON output.
 
 Example Output
 [
@@ -175,15 +166,7 @@ Example Output
     "unit": "Nm"
   }
 ]
-Summary
 
-The project demonstrates a clean implementation of a Retrieval-Augmented Generation pipeline for extracting structured technical specifications from unstructured documents.
-
-The design emphasizes:
-
-Modularity
-
-Deterministic structured output
 
 Semantic retrieval
 
