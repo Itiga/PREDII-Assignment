@@ -167,9 +167,4 @@ Example Output
   }
 ]
 
-
-Semantic retrieval
-
-Minimal hallucination
-
 The current implementation is functional, extensible, and aligned with practical RAG system design principles.
